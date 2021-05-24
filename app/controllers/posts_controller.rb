@@ -1,5 +1,7 @@
 class PostsController < ApplicationController
+  before_action :authenticate_user!, only: %i[ new create edit update destroy ]
   before_action :set_post, only: %i[ show edit update destroy ]
+
 
   # GET /posts or /posts.json
   def index
@@ -23,6 +25,8 @@ class PostsController < ApplicationController
   def create
     @post = Post.new(post_params)
 
+    @post.user = current_user
+
     respond_to do |format|
       if @post.save
         format.html { redirect_to @post, notice: "Post was successfully created." }
@@ -36,6 +40,10 @@ class PostsController < ApplicationController
 
   # PATCH/PUT /posts/1 or /posts/1.json
   def update
+    unless @post.user_id == current_user.id 
+      redirect_to :index, alert: "You have no rights to modify this post!", status: :unprocessable_entity
+    end
+
     respond_to do |format|
       if @post.update(post_params)
         format.html { redirect_to @post, notice: "Post was successfully updated." }
