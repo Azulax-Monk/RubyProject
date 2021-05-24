@@ -42,7 +42,7 @@ class PostsController < ApplicationController
 
   # PATCH/PUT /posts/1 or /posts/1.json
   def update
-    unless ((@post.user_id == current_user.id) || (current_user.role_id == 1)) 
+    unless ((@post.user_id == current_user.id) || (Role.find(current_user.role_id).name == 'Admin')) 
       redirect_to posts_url, alert: "You have no rights to modify this post!"
       return
     end
