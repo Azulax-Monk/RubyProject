@@ -15,10 +15,12 @@ class PostsController < ApplicationController
   # GET /posts/new
   def new
     @post = Post.new
+    @categories = Category.all
   end
 
   # GET /posts/1/edit
   def edit
+    @categories = Category.all
   end
 
   # POST /posts or /posts.json
@@ -40,7 +42,7 @@ class PostsController < ApplicationController
 
   # PATCH/PUT /posts/1 or /posts/1.json
   def update
-    unless ((@post.user_id == current_user.id) || (current_user.id == 1)) 
+    unless ((@post.user_id == current_user.id) || (current_user.role_id == 1)) 
       redirect_to posts_url, alert: "You have no rights to modify this post!"
       return
     end
