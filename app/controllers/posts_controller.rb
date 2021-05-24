@@ -40,8 +40,9 @@ class PostsController < ApplicationController
 
   # PATCH/PUT /posts/1 or /posts/1.json
   def update
-    unless @post.user_id == current_user.id 
-      redirect_to :index, alert: "You have no rights to modify this post!", status: :unprocessable_entity
+    unless ((@post.user_id == current_user.id) || (current_user.id == 1)) 
+      redirect_to posts_url, alert: "You have no rights to modify this post!"
+      return
     end
 
     respond_to do |format|
