@@ -1,5 +1,15 @@
 
-<h1>Posts</h1>
+<h1>Posts |
+<%= link_to 'New Post', new_post_path %>
+</h1> 
+
+<%= form_with method: :get do |form| %>
+  <%= form.label :query, "Search for:" %>
+  <%= form.text_field :query, value: params[:query] %>
+  <%= form.submit "Search" %>
+<% end %>
+
+<br>
 
 <table>
   <thead>
@@ -24,7 +34,3 @@
     <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New Post', new_post_path %>
