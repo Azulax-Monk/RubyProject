@@ -7,7 +7,7 @@ class PostsController < ApplicationController
   def index
     #@posts = Post.all
 
-    @posts = Post.search(params[:query])
+    @posts = Post.search(params[:query]).paginate(page: params[:page], per_page: 5)
   end
 
   # GET /posts/1 or /posts/1.json
@@ -44,7 +44,7 @@ class PostsController < ApplicationController
 
   # PATCH/PUT /posts/1 or /posts/1.json
   def update
-    unless ((@post.user_id == current_user.id) || (Role.find(current_user.role_id).name == 'Admin')) 
+    if ((@post.user_id != current_user.id) && (Role.find(current_user.role_id).name != 'Admin')) 
       redirect_to posts_url, alert: "You have no rights to modify this post!"
       return
     end
@@ -62,6 +62,11 @@ class PostsController < ApplicationController
 
   # DELETE /posts/1 or /posts/1.json
   def destroy
+    if ((@post.user_id != current_user.id) && (Role.find(current_user.role_id).name != 'Admin')) 
+      redirect_to posts_url, alert: "You have no rights to modify this post!"
+      return
+    end
+    
     @post.destroy
     respond_to do |format|
       format.html { redirect_to posts_url, notice: "Post was successfully destroyed." }

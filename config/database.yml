@@ -107,5 +107,7 @@ test:
   port: 5432
 
 production:
-  <<: *default
-  url: <%= ENV['DBURI'] %>
+<<: *default
+  database: RubyBlog_production
+  username: RubyBlog
+  password: <%= ENV['RUBYBLOG_DATABASE_PASSWORD'] %>
